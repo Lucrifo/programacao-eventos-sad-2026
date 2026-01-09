@@ -1,13 +1,16 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgeJ4mmymfEyWrE17xIupdRAMmW8Dy6xRpVqUIdX98v4O04iERPKuqKj0lnkj4Ps5Do7VzIfRwvcNc/pub?gid=1123729330&single=true&output=csv";
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgeJ4mmymfEyWrE17xIupdRAMmW8Dy6xRpVqUIdX98v4O04iERPKuqKj0lnkj4Ps5Do7VzIfRwvcNc/pub?output=csv";
 
   fetch(csvUrl)
     .then(response => response.text())
     .then(text => {
       const linhas = text.split("\n").slice(1);
       const tabela = document.getElementById("listaEventos");
+
+      if (!tabela) return;
+
       tabela.innerHTML = "";
 
       linhas.forEach(linha => {
@@ -33,8 +36,11 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     })
     .catch(err => {
-      console.error("Erro ao carregar CSV:", err);
+      console.error("Erro ao carregar a planilha:", err);
     });
 
 });
 </script>
+
+</body>
+</html>
