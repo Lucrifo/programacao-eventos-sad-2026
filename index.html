@@ -2,322 +2,222 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Programação dos Eventos SAD 2026</title>
-  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
   <style>
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 20px;
-      color: #333;
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f5f5f5;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    header img {
+      height: 80px;
     }
 
     h1 {
-      text-align: center;
+      margin: 0;
+      color: #1b5e20;
+    }
+
+    form, table {
+      background: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
       margin-bottom: 10px;
     }
 
-    p.subtitle {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #666;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    label {
-      font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 4px;
-      display: block;
-    }
-
-    input, select, textarea, button {
-      width: 100%;
-      padding: 8px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
     button {
-      grid-column: 1 / -1;
-      background: #1e40af;
+      padding: 10px 15px;
+      background: #1b5e20;
       color: #fff;
       border: none;
       cursor: pointer;
-      font-weight: bold;
+      border-radius: 4px;
     }
 
-    button:hover {
-      background: #1c3a99;
+    button.cancelar {
+      background: #777;
+      margin-left: 10px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 14px;
     }
 
-    table thead {
-      background: #1e40af;
-      color: #fff;
-    }
-
-    table th, table td {
-      padding: 8px;
+    th, td {
       border: 1px solid #ddd;
+      padding: 8px;
       text-align: left;
     }
 
-    table tbody tr:nth-child(even) {
-      background: #f2f2f2;
+    th {
+      background: #e0e0e0;
     }
 
-    .actions button {
-      background: #dc2626;
-      padding: 5px 8px;
-      font-size: 12px;
-    }
-
-    .actions button:hover {
-      background: #b91c1c;
+    .acoes button {
+      margin-right: 5px;
     }
   </style>
 </head>
 <body>
 
-  <header style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-    <img src="assets/logo-sad.png" alt="Logo SAD" style="height:64px;" />
-    <div>
-      <h1 style="margin:0;">Programação dos Eventos SAD 2026</h1>
-      <p class="subtitle" style="margin:4px 0 0;">Agenda anual de eventos institucionais</p>
-    </div>
-  </header>
+<header>
+  <img src="assets/logo-sad.png" alt="Logo SAD">
+  <h1>Programação dos Eventos SAD 2026</h1>
+</header>
 
+<form id="eventoForm">
+  <input type="hidden" id="indiceEdicao">
 
-  
+  <input type="date" id="data" required>
+  <input type="text" id="nome" placeholder="Nome do Evento" required>
+  <input type="time" id="inicio" required>
+  <input type="time" id="termino" required>
+  <input type="text" id="local" placeholder="Local">
+  <input type="text" id="publicoAlvo" placeholder="Público-alvo">
+  <input type="number" id="publicoEstimado" placeholder="Público estimado">
+  <input type="text" id="patrocinadores" placeholder="Captação de Patrocinadores">
+  <input type="text" id="pontoFocal" placeholder="Ponto Focal">
+  <textarea id="observacoes" placeholder="Observações"></textarea>
 
-  <div class="container">
+  <button type="submit" id="btnSalvar">Adicionar Evento</button>
+  <button type="button" class="cancelar" id="btnCancelar" style="display:none;">Cancelar edição</button>
+</form>
 
-    <form id="eventForm">
-      <div>
-        <label>Nome do Evento</label>
-        <input type="text" id="nome" required />
-      </div>
+<table>
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Evento</th>
+      <th>Horário</th>
+      <th>Local</th>
+      <th>Público</th>
+      <th>Estimado</th>
+      <th>Patrocinadores</th>
+      <th>Ponto Focal</th>
+      <th>Observações</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody id="listaEventos"></tbody>
+</table>
 
-      <div>
-        <label>Data do Evento</label>
-        <input type="date" id="data" required />
-      </div>
+<script>
+  let eventos = JSON.parse(localStorage.getItem("eventos")) || [];
 
-      <div>
-        <label>Horário de início</label></label>
-        <input type="time" id="inicio" required />
-      </div>
+  const form = document.getElementById("eventoForm");
+  const lista = document.getElementById("listaEventos");
+  const indiceEdicao = document.getElementById("indiceEdicao");
+  const btnSalvar = document.getElementById("btnSalvar");
+  const btnCancelar = document.getElementById("btnCancelar");
 
-      <div>
-        <label>Horário de término</label>
-        <input type="time" id="termino" required />
-      </div>
-
-      <div>
-        <label>Local</label>
-        <input type="text" id="local" />
-      </div>
-
-      <div>
-        <label>Público-alvo</label>
-        <input type="text" id="publicoAlvo" />
-      </div>
-
-      <div>
-        <label>Público estimado</label>
-        <input type="number" id="publicoEstimado" />
-      </div>
-
-      <div>
-        <label>Captação de Patrocinadores</label>
-        <select id="patrocinio">
-          <option>Não</option>
-          <option>Sim</option>
-          <option>Em definição</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Ponto Focal</label>
-        <input type="text" id="pontoFocal" />
-      </div>
-
-      <div style="grid-column: 1 / -1;">
-        <label>Observações</label>
-        <textarea id="obs"></textarea>
-      </div>
-
-      <button type="submit" id="submitBtn">Adicionar evento</button>
-    </form>
-
-    <table id="eventTable">
-      <thead>
+  function renderizar() {
+    lista.innerHTML = "";
+    eventos.forEach((e, i) => {
+      lista.innerHTML += `
         <tr>
-          <th>Nome do Evento</th>
-          <th>Data</th>
-          <th>Início</th>
-          <th>Término</th>
-          <th>Local</th>
-          <th>Público-alvo</th>
-          <th>Público estimado</th>
-          <th>Patrocinadores</th>
-          <th>Ponto Focal</th>
-          <th>Observações</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-  </div>
-
-  <script>
-    const form = document.getElementById('eventForm');
-    const tableBody = document.querySelector('#eventTable tbody');
-
-    let eventos = JSON.parse(localStorage.getItem('eventosSAD2026')) || [];
-    let editIndex = null;
-
-    function renderTable() {
-      tableBody.innerHTML = '';
-      eventos.forEach((e, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+          <td>${e.data}</td>
           <td>${e.nome}</td>
-          <td>${e.data}</td>
-          <td>${e.inicio}</td>
-          <td>${e.termino}</td>
+          <td>${e.inicio} - ${e.termino}</td>
           <td>${e.local}</td>
           <td>${e.publicoAlvo}</td>
           <td>${e.publicoEstimado}</td>
-          <td>${e.patrocinio}</td>
+          <td>${e.patrocinadores}</td>
           <td>${e.pontoFocal}</td>
-          <td>${e.obs}</td>
-          <td class="actions">
-            <button onclick="editarEvento(${index})">Editar</button>
-            <button onclick="removerEvento(${index})">Excluir</button>
+          <td>${e.observacoes}</td>
+          <td class="acoes">
+            <button onclick="editar(${i})">Editar</button>
+            <button onclick="excluir(${i})">Excluir</button>
           </td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }</td>
-          <td>${e.data}</td>
-          <td>${e.inicio}</td>
-          <td>${e.termino}</td>
-          <td>${e.local}</td>
-          <td>${e.publicoAlvo}</td>
-          <td>${e.publicoEstimado}</td>
-          <td>${e.patrocinio}</td>
-          <td>${e.pontoFocal}</td>
-          <td>${e.obs}</td>
-          <td class="actions"><button onclick="removerEvento(${index})">Excluir</button></td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-
-    function editarEvento(index) {
-      const e = eventos[index];
-      nome.value = e.nome;
-      data.value = e.data;
-      inicio.value = e.inicio;
-      termino.value = e.termino;
-      local.value = e.local;
-      publicoAlvo.value = e.publicoAlvo;
-      publicoEstimado.value = e.publicoEstimado;
-      patrocinio.value = e.patrocinio;
-      pontoFocal.value = e.pontoFocal;
-      obs.value = e.obs;
-      editIndex = index;
-      document.getElementById('submitBtn').textContent = 'Salvar alterações';
-    }
-
-    function removerEvento(index) {
-      eventos.splice(index, 1);
-      localStorage.setItem('eventosSAD2026', JSON.stringify(eventos));
-      renderTable();
-    }
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const evento = {
-        nome: nome.value,
-        data: data.value,
-        inicio: inicio.value,
-        termino: termino.value,
-        local: local.value,
-        publicoAlvo: publicoAlvo.value,
-        publicoEstimado: publicoEstimado.value,
-        patrocinio: patrocinio.value,
-        pontoFocal: pontoFocal.value,
-        obs: obs.value
-      };
-
-      if (editIndex === null) {
-        eventos.push(evento);
-      } else {
-        eventos[editIndex] = evento;
-        editIndex = null;
-        document.getElementById('submitBtn').textContent = 'Adicionar evento';
-      }
-
-      localStorage.setItem('eventosSAD2026', JSON.stringify(eventos));
-      form.reset();
-      renderTable();
+        </tr>
+      `;
     });
+  }
 
-      const evento = {
-        data: data.value,
-        nome: nome.value,
-        inicio: inicio.value,
-        termino: termino.value,
-        local: local.value,
-        publicoAlvo: publicoAlvo.value,
-        publicoEstimado: publicoEstimado.value,
-        patrocinio: patrocinio.value,
-        pontoFocal: pontoFocal.value,
-        obs: obs.value
-      };
+  form.onsubmit = function(e) {
+    e.preventDefault();
 
+    const evento = {
+      data: data.value,
+      nome: nome.value,
+      inicio: inicio.value,
+      termino: termino.value,
+      local: local.value,
+      publicoAlvo: publicoAlvo.value,
+      publicoEstimado: publicoEstimado.value,
+      patrocinadores: patrocinadores.value,
+      pontoFocal: pontoFocal.value,
+      observacoes: observacoes.value
+    };
+
+    if (indiceEdicao.value === "") {
       eventos.push(evento);
-      localStorage.setItem('eventosSAD2026', JSON.stringify(eventos));
-      form.reset();
-      renderTable();
-    });
+    } else {
+      eventos[indiceEdicao.value] = evento;
+    }
 
-    renderTable();
-  </script>
+    localStorage.setItem("eventos", JSON.stringify(eventos));
+    form.reset();
+    indiceEdicao.value = "";
+    btnSalvar.textContent = "Adicionar Evento";
+    btnCancelar.style.display = "none";
+    renderizar();
+  };
+
+  function editar(i) {
+    const e = eventos[i];
+    data.value = e.data;
+    nome.value = e.nome;
+    inicio.value = e.inicio;
+    termino.value = e.termino;
+    local.value = e.local;
+    publicoAlvo.value = e.publicoAlvo;
+    publicoEstimado.value = e.publicoEstimado;
+    patrocinadores.value = e.patrocinadores;
+    pontoFocal.value = e.pontoFocal;
+    observacoes.value = e.observacoes;
+
+    indiceEdicao.value = i;
+    btnSalvar.textContent = "Salvar Alterações";
+    btnCancelar.style.display = "inline-block";
+  }
+
+  function excluir(i) {
+    if (confirm("Deseja excluir este evento?")) {
+      eventos.splice(i, 1);
+      localStorage.setItem("eventos", JSON.stringify(eventos));
+      renderizar();
+    }
+  }
+
+  btnCancelar.onclick = function() {
+    form.reset();
+    indiceEdicao.value = "";
+    btnSalvar.textContent = "Adicionar Evento";
+    btnCancelar.style.display = "none";
+  };
+
+  renderizar();
+</script>
 
 </body>
 </html>
