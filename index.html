@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Programação dos Eventos SAD 2026</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
   <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
@@ -108,8 +109,16 @@
 </head>
 <body>
 
-  <h1>Programação dos Eventos SAD 2026</h1>
-  <p class="subtitle">Agenda anual de eventos institucionais</p>
+  <header style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+    <img src="assets/logo-sad.png" alt="Logo SAD" style="height:64px;" />
+    <div>
+      <h1 style="margin:0;">Programação dos Eventos SAD 2026</h1>
+      <p class="subtitle" style="margin:4px 0 0;">Agenda anual de eventos institucionais</p>
+    </div>
+  </header>
+
+
+  
 
   <div class="container">
 
@@ -168,7 +177,7 @@
         <textarea id="obs"></textarea>
       </div>
 
-      <button type="submit">Adicionar evento</button>
+      <button type="submit" id="submitBtn">Adicionar evento</button>
     </form>
 
     <table id="eventTable">
@@ -197,6 +206,7 @@
     const tableBody = document.querySelector('#eventTable tbody');
 
     let eventos = JSON.parse(localStorage.getItem('eventosSAD2026')) || [];
+    let editIndex = null;
 
     function renderTable() {
       tableBody.innerHTML = '';
@@ -213,10 +223,43 @@
           <td>${e.patrocinio}</td>
           <td>${e.pontoFocal}</td>
           <td>${e.obs}</td>
+          <td class="actions">
+            <button onclick="editarEvento(${index})">Editar</button>
+            <button onclick="removerEvento(${index})">Excluir</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }</td>
+          <td>${e.data}</td>
+          <td>${e.inicio}</td>
+          <td>${e.termino}</td>
+          <td>${e.local}</td>
+          <td>${e.publicoAlvo}</td>
+          <td>${e.publicoEstimado}</td>
+          <td>${e.patrocinio}</td>
+          <td>${e.pontoFocal}</td>
+          <td>${e.obs}</td>
           <td class="actions"><button onclick="removerEvento(${index})">Excluir</button></td>
         `;
         tableBody.appendChild(row);
       });
+    }
+
+    function editarEvento(index) {
+      const e = eventos[index];
+      nome.value = e.nome;
+      data.value = e.data;
+      inicio.value = e.inicio;
+      termino.value = e.termino;
+      local.value = e.local;
+      publicoAlvo.value = e.publicoAlvo;
+      publicoEstimado.value = e.publicoEstimado;
+      patrocinio.value = e.patrocinio;
+      pontoFocal.value = e.pontoFocal;
+      obs.value = e.obs;
+      editIndex = index;
+      document.getElementById('submitBtn').textContent = 'Salvar alterações';
     }
 
     function removerEvento(index) {
@@ -227,6 +270,32 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      const evento = {
+        nome: nome.value,
+        data: data.value,
+        inicio: inicio.value,
+        termino: termino.value,
+        local: local.value,
+        publicoAlvo: publicoAlvo.value,
+        publicoEstimado: publicoEstimado.value,
+        patrocinio: patrocinio.value,
+        pontoFocal: pontoFocal.value,
+        obs: obs.value
+      };
+
+      if (editIndex === null) {
+        eventos.push(evento);
+      } else {
+        eventos[editIndex] = evento;
+        editIndex = null;
+        document.getElementById('submitBtn').textContent = 'Adicionar evento';
+      }
+
+      localStorage.setItem('eventosSAD2026', JSON.stringify(eventos));
+      form.reset();
+      renderTable();
+    });
 
       const evento = {
         data: data.value,
