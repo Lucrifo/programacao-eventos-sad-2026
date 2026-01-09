@@ -1,37 +1,40 @@
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const sheetId = "1okaLOcbfLmMGi3zZ5K5YkVbHoCDCAdu9m_TaqSsb_G0";
-    const sheetName = "Programação dos Eventos SAD 2026";
+document.addEventListener("DOMContentLoaded", function () {
 
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgeJ4mmymfEyWrE17xIupdRAMmW8Dy6xRpVqUIdX98v4O04iERPKuqKj0lnkj4Ps5Do7VzIfRwvcNc/pub?gid=1123729330&single=true&output=csv";
 
-    fetch(url)
-      .then(res => res.text())
-      .then(text => {
-        const json = JSON.parse(text.substring(47).slice(0, -2));
-        const rows = json.table.rows;
-        const tabela = document.getElementById("listaEventos");
+  fetch(csvUrl)
+    .then(response => response.text())
+    .then(text => {
+      const linhas = text.split("\n").slice(1);
+      const tabela = document.getElementById("listaEventos");
+      tabela.innerHTML = "";
 
-        tabela.innerHTML = "";
+      linhas.forEach(linha => {
+        if (!linha.trim()) return;
 
-        rows.forEach(r => {
-          tabela.innerHTML += `
-            <tr>
-              <td>${r.c[0]?.v || ""}</td>
-              <td>${r.c[1]?.v || ""}</td>
-              <td>${r.c[2]?.v || ""} - ${r.c[3]?.v || ""}</td>
-              <td>${r.c[4]?.v || ""}</td>
-              <td>${r.c[5]?.v || ""}</td>
-              <td>${r.c[6]?.v || ""}</td>
-              <td>${r.c[7]?.v || ""}</td>
-              <td>${r.c[8]?.v || ""}</td>
-              <td>${r.c[9]?.v || ""}</td>
-            </tr>
-          `;
-        });
-      })
-      .catch(err => {
-        console.error("Erro ao carregar planilha:", err);
+        const col = linha.split(";");
+
+        if (col.length < 9) return;
+
+        tabela.innerHTML += `
+          <tr>
+            <td>${col[0]}</td>
+            <td>${col[1]}</td>
+            <td>${col[2]} - ${col[3]}</td>
+            <td>${col[4]}</td>
+            <td>${col[5]}</td>
+            <td>${col[6]}</td>
+            <td>${col[7]}</td>
+            <td>${col[8]}</td>
+            <td>${col[9] || ""}</td>
+          </tr>
+        `;
       });
-  });
+    })
+    .catch(err => {
+      console.error("Erro ao carregar CSV:", err);
+    });
+
+});
 </script>
