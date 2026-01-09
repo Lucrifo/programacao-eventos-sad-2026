@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Programação dos Eventos SAD 2026</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background-color: #f2f4f7;
       color: #333;
     }
 
     header {
-      background-color: #1b5e20;
+      background: linear-gradient(90deg, #1f4fa3, #2f6fd6);
       color: #fff;
-      padding: 15px 20px;
+      padding: 20px;
       display: flex;
       align-items: center;
       gap: 15px;
@@ -31,47 +30,56 @@
     }
 
     header h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
       font-size: 18px;
-      margin: 0;
     }
 
-    .container {
-      padding: 15px;
+    .card p {
+      font-size: 14px;
+      color: #555;
     }
 
-    .top-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
+    .actions {
+      margin: 15px 0;
+      text-align: right;
     }
 
-    .top-actions h2 {
-      font-size: 16px;
-      margin: 0;
-    }
-
-    .btn {
-      background-color: #1b5e20;
+    .actions a {
+      background-color: #1f4fa3;
       color: #fff;
-      padding: 8px 14px;
-      border-radius: 4px;
+      padding: 10px 15px;
+      border-radius: 5px;
       text-decoration: none;
       font-size: 14px;
     }
 
     .iframe-wrapper {
-      width: 100%;
-      height: calc(100vh - 160px);
-      background: #fff;
+      margin-top: 15px;
       border-radius: 6px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.1);
       overflow: hidden;
+      height: 70vh;
+      border: 1px solid #ddd;
     }
 
-    .iframe-wrapper iframe {
+    iframe {
       width: 100%;
       height: 100%;
       border: none;
@@ -80,66 +88,58 @@
     footer {
       text-align: center;
       font-size: 12px;
-      color: #666;
-      padding: 10px;
+      color: #777;
+      margin: 30px 0;
     }
 
-    /* MOBILE */
     @media (max-width: 768px) {
       header {
         flex-direction: column;
         align-items: flex-start;
       }
 
-      header h1 {
-        font-size: 16px;
-      }
-
-      .top-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .btn {
+      .actions {
         text-align: center;
-      }
-
-      .iframe-wrapper {
-        height: calc(100vh - 220px);
       }
     }
   </style>
 </head>
+
 <body>
 
-<header>
-  <img src="assets/logo-sad.png" alt="Logo SAD">
-  <h1>Programação dos Eventos SAD 2026</h1>
-</header>
+  <header>
+    <img src="logo-sad.png" alt="Logo SAD">
+    <h1>Programação dos Eventos SAD 2026</h1>
+  </header>
 
-<div class="container">
+  <main>
+    <div class="card">
+      <h2>Agenda Institucional de Eventos</h2>
+      <p>
+        Planejamento anual dos eventos organizados e acompanhados pela
+        Secretaria de Administração (SAD).
+      </p>
 
-  <div class="top-actions">
-    <h2>Agenda oficial de eventos</h2>
-    <a 
-      class="btn" 
-      href="https://docs.google.com/spreadsheets/d/1okaLOcbfLmMGi3zZ5K5YkVbHoCDCAdu9m_TaqSsb_G0/edit"
-      target="_blank">
-      Abrir planilha completa
-    </a>
-  </div>
+      <div class="actions">
+        <a 
+          href="https://docs.google.com/spreadsheets/d/1okaLOcbfLmMGi3zZ5K5YkVbHoCDCAdu9m_TaqSsb_G0/edit"
+          target="_blank">
+          Abrir planilha completa
+        </a>
+      </div>
 
-  <div class="iframe-wrapper">
-    <iframe 
-      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQgeJ4mmymfEyWrE17xIupdRAMmW8Dy6xRpVqUIdX98v4O04iERPKuqKj0lnkj4Ps5Do7VzIfRwvcNc/pubhtml?widget=true&headers=false">
-    </iframe>
-  </div>
+      <div class="iframe-wrapper">
+        <iframe 
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQgeJ4mmymfEyWrE17xIupdRAMmW8Dy6xRpVqUIdX98v4O04iERPKuqKj0lnkj4Ps5Do7VzIfRwvcNc/pubhtml?widget=false&headers=false"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </main>
 
-</div>
-
-<footer>
-  Secretaria de Administração • SAD • 2026
-</footer>
+  <footer>
+    © 2026 • Secretaria de Administração • Prefeitura Municipal
+  </footer>
 
 </body>
 </html>
