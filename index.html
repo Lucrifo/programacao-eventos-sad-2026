@@ -117,7 +117,7 @@
       <h2>Agenda Institucional de Eventos</h2>
       <p>
         Planejamento anual dos eventos organizados e acompanhados pelo
-  Cerimonial da Secretaria de Administração (SAD).
+        Cerimonial da Secretaria de Administração (SAD).
       </p>
 
       <div class="actions">
@@ -129,10 +129,7 @@
       </div>
 
       <div class="iframe-wrapper">
-        <iframe 
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQgeJ4mmymfEyWrE17xIupdRAMmW8Dy6xRpVqUIdX98v4O04iERPKuqKj0lnkj4Ps5Do7VzIfRwvcNc/pubhtml?widget=false&headers=false"
-          loading="lazy">
-        </iframe>
+        <iframe id="planilha-frame" loading="lazy"></iframe>
       </div>
     </div>
   </main>
@@ -140,6 +137,13 @@
   <footer>
     © 2026 • Secretaria de Administração • Prefeitura Municipal
   </footer>
+
+  <script>
+    const iframe = document.getElementById("planilha-frame");
+    const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQgeJ4mmymfEyWrE17xIupdRAMmW8Dy6xRpVqUIdX98v4O04iERPKuqKj0lnkj4Ps5Do7VzIfRwvcNc/pubhtml?widget=false&headers=false";
+    // Adiciona timestamp para sempre carregar a versão mais recente
+    iframe.src = url + "&t=" + new Date().getTime();
+  </script>
 
 </body>
 </html>
